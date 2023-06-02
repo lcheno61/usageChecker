@@ -58,58 +58,64 @@ struct ContentView: View {
                         .fixedSize()
                     
                     VStack{ Divider() }
-                }
+                }.frame(height: 24)
                 HStack {
                     Spacer().frame(width: 10)
                     Text("Path")
                         .fixedSize()
+                    Spacer().frame(width: 25)
                     TextField("" ,text: $userSettings.projectPath)
                         .cornerRadius(5)
                         .frame(minWidth: 350)
                         .disabled(viewModel.isUIDisable)
                     Button(action: {
-//                        self.projectPathBrowseAction()
-                        let openPanel = NSOpenPanel()
-                        openPanel.canChooseDirectories = true
-                        openPanel.canChooseFiles = false
-                        let okButtonPressed = openPanel.runModal() == .OK
-                        if okButtonPressed {
-                            // Update the path text field
-                            let path = openPanel.url?.path
-                            userSettings.projectPath = path!
-                        }
+                        self.browseButtonAction("projectPath")
                     }) {
                         Text("Browse")
                     }
                     .frame(minWidth: 120)
                     .disabled(viewModel.isUIDisable)
                     .buttonStyle(.borderedProminent)
-                }
+                }.frame(height: 24)
                 HStack(alignment: .top) {
                     Spacer().frame(width: 10)
                     Text("Target")
                         .fixedSize()
-                    Picker(selection: $userSettings.isTargetPathHidden, label: Text("")) {
-                        Text("Folder").tag(false)
-                        Text("Image").tag(true)
+                    Picker(selection: $userSettings.isTargetPathHidden,
+                           label: Text("")) {
+                        Text("Image").tag(0).frame(minHeight: 24)
+                        Text("Folder").tag(1).frame(minHeight: 24)
                     }
                     .pickerStyle(.radioGroup)
                     .disabled(viewModel.isUIDisable)
-                    .frame(minWidth: 80)
-                    if !userSettings.isTargetPathHidden {
-                        TextField("" ,text: $userSettings.targetPath)
-                            .cornerRadius(5)
-                            .frame(minWidth: 350)
-                            .disabled(viewModel.isUIDisable)
-                        Button(action: {
-                            self.targetPathBrowseAction()
-                        }) {
-                            Text("Browse")
-                        }.frame(minWidth: 120)
-                            .disabled(viewModel.isUIDisable)
-                            .buttonStyle(.borderedProminent)
+                    .frame(height: 48)
+                    .fixedSize()
+                    if userSettings.isTargetPathHidden == 1 {
+                        VStack {
+                            Spacer()
+                            TextField("" ,text: $userSettings.targetPath)
+                                .cornerRadius(5)
+                                .frame(minWidth: 350)
+                                .disabled(viewModel.isUIDisable)
+                        }.frame(height: 48)
+                        VStack {
+                            Spacer()
+                            Button(action: {
+                                self.browseButtonAction("targetPath")
+                            }) {
+                                Text("Browse")
+                            }.frame(minWidth: 120)
+                                .disabled(viewModel.isUIDisable)
+                                .buttonStyle(.borderedProminent)
+                        }.frame(height: 48)
+
                     }
-                    
+                }.frame(height: 48)
+                if userSettings.isTargetPathHidden == 1 {
+                    HStack {
+                        Spacer().frame(width: 131)
+                        Toggle("Search for directory only.", isOn: $userSettings.searchDirectoryOnly).disabled(viewModel.isUIDisable)
+                    }.frame(height: 24)
                 }
             }
             //- Setting ------------------------------
@@ -119,7 +125,7 @@ struct ContentView: View {
                     Text("Setting").bold()
                         .fixedSize()
                     VStack{ Divider() }
-                }
+                }.frame(height: 24)
                 HStack {
                     Spacer().frame(width: 10)
                     Text("Extension ")
@@ -173,14 +179,14 @@ struct ContentView: View {
                             }
                             .frame(width: 21, height: 21)
                         }.width(min: 40, max: 80)
-                        TableColumn("FileName", value: \.fileName).width(min: 100, max: 150)
+                        TableColumn("FileName", value: \.fileName).width(min: 100, max: 200)
                         TableColumn("Path", value: \.filePath).width(min: 200)
                     }.frame(minHeight: 200)
                         .tableStyle(.bordered(alternatesRowBackgrounds: true))
                     
                 } else {
                     Table(viewModel.dependsOnData, selection: $tableSelected) {
-                        TableColumn("FileName", value: \.fileName).width(min: 100, max: 150)
+                        TableColumn("FileName", value: \.fileName).width(min: 100, max: 200)
                         TableColumn("Depends On", value: \.dependsOn).width(min: 200)
                     }.frame(minHeight: 200)
                         .tableStyle(.bordered(alternatesRowBackgrounds: true))
@@ -226,7 +232,7 @@ struct ContentView: View {
     }
     //MARK: - Actions ------------------------------
 
-    func projectPathBrowseAction() {
+    func browseButtonAction(_ sender: String) {
         let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = true
         openPanel.canChooseFiles = false
@@ -234,19 +240,11 @@ struct ContentView: View {
         if okButtonPressed {
             // Update the path text field
             let path = openPanel.url?.path
-            userSettings.projectPath = path!
-        }
-    }
-    
-    func targetPathBrowseAction() {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories = true
-        openPanel.canChooseFiles = false
-        let okButtonPressed = openPanel.runModal() == .OK
-        if okButtonPressed {
-            // Update the path text field
-            let path = openPanel.url?.path
-            userSettings.targetPath = path!
+            if sender == "projectPath" {
+                userSettings.projectPath = path!
+            } else if sender == "targetPath" {
+                userSettings.targetPath = path!
+            }
         }
     }
     
@@ -262,10 +260,11 @@ struct ContentView: View {
         
         let ext = extensionString
         var errorMessage = ""
-        if userSettings.projectPath.isEmpty || (!userSettings.isTargetPathHidden && userSettings.targetPath.isEmpty) {
+        
+        if userSettings.projectPath.isEmpty || (userSettings.isTargetPathHidden != 0 && userSettings.targetPath.isEmpty) {
             errorMessage = "Path cannot be empty."
         }
-        if !FileManager.default.fileExists(atPath: userSettings.projectPath) || (!userSettings.isTargetPathHidden && !FileManager.default.fileExists(atPath: userSettings.targetPath)) {
+        if !FileManager.default.fileExists(atPath: userSettings.projectPath) || (userSettings.isTargetPathHidden != 0 && !FileManager.default.fileExists(atPath: userSettings.targetPath)) {
             errorMessage = "Please check the path."
         }
         if ext.isEmpty {
@@ -276,11 +275,9 @@ struct ContentView: View {
             showAlert(with: .warning, title: "Error", subtitle: errorMessage)
             return
         }
-        if !userSettings.isTargetPathHidden {
-            viewModel.doFilesCheck(userSettings.projectPath, targetPath: userSettings.targetPath, type: ext)
-        } else {
-            viewModel.doFilesCheck(userSettings.projectPath, type: ext)
-        }
+        let path = userSettings.isTargetPathHidden == 0 ? userSettings.projectPath : userSettings.targetPath
+        viewModel.setupTargetArray(targetType: userSettings.isTargetPathHidden, path: path, dirOnly: userSettings.searchDirectoryOnly)
+        viewModel.doFilesCheck(userSettings.projectPath, type: ext)
     }
     
     func createCSV(from array: [UnusedModel]) -> String {
@@ -349,9 +346,14 @@ class UserSettings: ObservableObject {
             UserDefaults.standard.set(targetPath, forKey: "targetPath")
         }
     }
-    @Published var isTargetPathHidden: Bool {
+    @Published var isTargetPathHidden: Int {
         didSet {
             UserDefaults.standard.set(isTargetPathHidden, forKey: "isTargetPathHidden")
+        }
+    }
+    @Published var searchDirectoryOnly: Bool {
+        didSet {
+            UserDefaults.standard.set(searchDirectoryOnly, forKey: "searchDirectoryOnly")
         }
     }
     @Published var hCheckBox: Bool {
@@ -387,12 +389,13 @@ class UserSettings: ObservableObject {
 
     init() {
         self.projectPath = UserDefaults.standard.string(forKey: "projectPath") ?? ""
-        self.isTargetPathHidden = UserDefaults.standard.bool(forKey: "isTargetPathHidden")
-        if UserDefaults.standard.bool(forKey: "isTargetPathHidden") {
+        self.isTargetPathHidden = UserDefaults.standard.integer(forKey: "isTargetPathHidden")
+        if UserDefaults.standard.integer(forKey: "isTargetPathHidden") == 2 {
             self.targetPath = ""
         } else {
-            self.targetPath = UserDefaults.standard.string(forKey: "projectPath") ?? ""
+            self.targetPath = UserDefaults.standard.string(forKey: "targetPath") ?? ""
         }
+        self.searchDirectoryOnly = UserDefaults.standard.bool(forKey: "searchDirectoryOnly")
         self.hCheckBox = UserDefaults.standard.bool(forKey: "hCheckBox")
         self.mCheckBox = UserDefaults.standard.bool(forKey: "mCheckBox")
         self.swiftCheckBox = UserDefaults.standard.bool(forKey: "swiftCheckBox")

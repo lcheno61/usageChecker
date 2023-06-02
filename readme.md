@@ -5,3 +5,9 @@
 
 - Supported Image target type: .gif, .jpg, .png, .jpeg
 - Supported source target type: .h, .m, .swift
+
+## version 1.1
+- Target
+    - Add search for directory only.
+    - Ignore the files in subfolder when choose the folder.
+- Integrate browse action.

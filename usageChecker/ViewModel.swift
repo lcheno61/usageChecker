@@ -13,7 +13,9 @@ extension ContentView {
         var dataLock: NSLock?
         var progress = 0
         var spentTime = ""
-        
+        var targetArray = [String]()
+
+        @Published var searchDirectoryOnly = false
         @Published var unusedData = [UnusedModel]()
         @Published var dependsOnData = [DependsOnModel]()
         @Published var searchProgress = ""
@@ -24,9 +26,21 @@ extension ContentView {
         init() {
             dataLock = NSLock()
         }
+                
+        func setupTargetArray(targetType: Int, path: String, dirOnly: Bool) {
+            targetArray.removeAll()
+            switch targetType {
+            case 0:
+                targetArray = Utilities.shared.imageFiles(path)
+            case 1:
+                targetArray = Utilities.shared.directorys(path, dirOnly: dirOnly)
+            default:
+                break
+            }
+        }
         
         
-        func doFilesCheck(_ path: String, targetPath: String? = "", type: String){
+        func doFilesCheck(_ path: String, type: String){
             
             unusedData.removeAll()
             dependsOnData.removeAll()
@@ -35,14 +49,10 @@ extension ContentView {
             isUIDisable = true
             let startTime = Date()
             
-            var targetFiles = [String]()
-            if targetPath == "" {
-                targetFiles = Utilities.shared.imageFiles(path)
-            } else {
-                targetFiles = Utilities.shared.sourceCodeFiles(path)
-            }
-            let targetCount = targetFiles.count
+            let targetCount = targetArray.count
+            guard targetCount != 0 else { return }
             
+            let targetFiles = targetArray
             DispatchQueue.global(qos: .background).async {
                 for file in targetFiles where file != "" {
                     self.progress += 1

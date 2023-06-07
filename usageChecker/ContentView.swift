@@ -261,13 +261,11 @@ struct ContentView: View {
         let ext = extensionString
         var errorMessage = ""
         
-        if userSettings.projectPath.isEmpty || (userSettings.isTargetPathHidden != 0 && userSettings.targetPath.isEmpty) {
+        if userSettings.projectPath == "" || (userSettings.isTargetPathHidden != 0 && userSettings.targetPath == "") {
             errorMessage = "Path cannot be empty."
-        }
-        if !FileManager.default.fileExists(atPath: userSettings.projectPath) || (userSettings.isTargetPathHidden != 0 && !FileManager.default.fileExists(atPath: userSettings.targetPath)) {
+        }else if !FileManager.default.fileExists(atPath: userSettings.projectPath) || (userSettings.isTargetPathHidden != 0 && !FileManager.default.fileExists(atPath: userSettings.targetPath)) {
             errorMessage = "Please check the path."
-        }
-        if ext.isEmpty {
+        }else if ext == "" {
             errorMessage = "Setting cannot be empty."
         }
         

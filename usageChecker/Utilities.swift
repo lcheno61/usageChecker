@@ -61,7 +61,7 @@ class Utilities: NSObject {
         task.launchPath = "/usr/bin/find"
         
         let para = [path, "-name", "*.\(type)"]
-        task.arguments = (para as! [String])
+        task.arguments = para
         let pipe = Pipe()
         task.standardOutput = pipe
         task.launch()
@@ -70,7 +70,7 @@ class Utilities: NSObject {
         let data = file.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)
         
-        var resultArray = output?.components(separatedBy: "\n")
+        let resultArray = output?.components(separatedBy: "\n")
         var finalOutput = resultArray?.filter{ !$0.contains("AppIcon.appiconset") }
         finalOutput = finalOutput?.filter{ !$0.contains("LaunchImage.launchimage") }
         finalOutput = finalOutput?.filter{ !$0.contains(".xcarchive") }
@@ -86,7 +86,7 @@ class Utilities: NSObject {
         task.launchPath = "/usr/bin/env"
         
         let para = ["ls", path]
-        task.arguments = (para as! [String])
+        task.arguments = para
         let pipe = Pipe()
         task.standardOutput = pipe
         task.launch()

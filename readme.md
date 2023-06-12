@@ -11,3 +11,6 @@
     - Add search for directory only.
     - Ignore the files in subfolder when choose the folder.
 - Integrate browse action.
+
+## version 1.2
+- Add icon

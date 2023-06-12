@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E92757E92A36B505009893F6 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = E92757E82A36B505009893F6 /* readme.md */; };
 		E9BD385D2A2086F400E6FF3F /* usageCheckerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BD385C2A2086F400E6FF3F /* usageCheckerApp.swift */; };
 		E9BD385F2A2086F400E6FF3F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BD385E2A2086F400E6FF3F /* ContentView.swift */; };
 		E9BD38612A2086F600E6FF3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9BD38602A2086F600E6FF3F /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E92757E82A36B505009893F6 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		E9BD38592A2086F400E6FF3F /* usageChecker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = usageChecker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9BD385C2A2086F400E6FF3F /* usageCheckerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = usageCheckerApp.swift; sourceTree = "<group>"; };
 		E9BD385E2A2086F400E6FF3F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 		E9BD38502A2086F400E6FF3F = {
 			isa = PBXGroup;
 			children = (
+				E92757E82A36B505009893F6 /* readme.md */,
 				E9BD385B2A2086F400E6FF3F /* usageChecker */,
 				E9BD386D2A2086F700E6FF3F /* usageCheckerTests */,
 				E9BD38772A2086F700E6FF3F /* usageCheckerUITests */,
@@ -243,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9BD38642A2086F600E6FF3F /* Preview Assets.xcassets in Resources */,
+				E92757E92A36B505009893F6 /* readme.md in Resources */,
 				E9BD38612A2086F600E6FF3F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -439,7 +443,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lchen1424.usageChecker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -464,7 +468,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lchen1424.usageChecker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
